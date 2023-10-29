@@ -27,14 +27,14 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database;
+        const database = firebase.database();
         const dataRef = database.ref('nourishCLTUserData');
 
         function signUp() {
             const username = document.getElementById("username").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
-            const org = document.getElementById("oranization").value;
+            const org = document.getElementById("organization").value;
 
             // Sign up with email and password
             firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -48,7 +48,7 @@
                         'username': username,                        
                         'organization': organization
                     };
-                    dataRef.push(data);
+                    database.ref('nourishCLTUserData').push(data);
 
                     window.open("forum.html?uid=" + user.uid, "_self")
                 })
