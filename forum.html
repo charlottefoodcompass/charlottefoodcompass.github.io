@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@200&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Asap+Condensed&display=swap');
+        body{
+            background-color: #27263f;
+        }
+        h1{
+            color:#faf9f9;
+            font-family: 'Kanit', sans-serif;
+            font-size: 60px;
+        }
+        .cardStyle {
+            display: flex;
+            flex-direction: column;
+        }
+        .flex-container {
+            display: flex;
+            background-color: #32ba8c;
+            justify-content: space-evenly;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 30px;
+        }
+        .flex-item {
+            align-content:  center;
+            background-color: #faf9f9;
+            padding: 5px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'Asap Condensed', sans-serif;
+            
+        }
+        #filterBy{
+            color:#faf9f9;
+            font-family: 'Asap Condensed', sans-serif;
+            font-size: 40px;
+            margin-left: 3%;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz@6..12&display=swap');
+        a{
+            color: #faf9f9;
+            font-family: 'Nunito Sans', sans-serif;
+            font-weight: 1000;
+            font-size: 25px;
+            margin-left: 5%;
+            margin-right: 1%;
+        }
+        input{
+            border-radius: 10px;
+        }
+        .accountButtons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+            background-color: #1d4947;
+            color: #faf9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            margin-left: 10px;
+            border-radius: 30px;
+            margin-right: 30px;
+            margin-top: 30px;
+            padding:10px 30px 10px 30px;
+
+        }
+        .accountButtons1 {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+            background-color: #1d4947;
+            color: #faf9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            margin-left: 10px;
+            border-radius: 30px;
+            margin-right: 30px;
+            margin-top: 80px;
+            padding:10px 30px 10px 30px;
+
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+    <button class = "accountButtons" onclick="signout()">Sign Out</button>
+    <button class = "accountButtons1" onclick = "goToUserPage()">Create/Delete/Edit Posts and Requests</button>
+    <center><h1>View Activity</h1></center>
+    <div>
+        <h3 id = "filterBy">Filter by:</h3><br>
+        <a id="orgFilter">Organization</a><input>
+        <a id="locFilter">City</a><input>
+        <a id="dateFilter">Date</a><input type = "date">
+        <button onclick="loadQueryListFilters()">filter</button>
+        
+        <br><br><br>
+    </div>
+        <center><div class="cardStyle" id="queryList"></div></center>
+        <template id="queryCardTemplate">
+            <div class="flex-container">
+                <p class="flex-item" id="status"></p>
+                <p class="flex-item" id="f1"></p>
+                <p class="flex-item" id="f2"></p>
+                <p class="flex-item" id="f3"></p>
+                <p class="flex-item" id="f4"></p>
+            </div>
+        </template>
+        <script>
+            const firebaseConfig = {
+                apiKey: "AIzaSyBvNaTsxPXBcZraPPgSl7q1A5L-aTTvnOA",
+                authDomain: "qch-project-thingy.firebaseapp.com",
+                databaseURL: "https://qch-project-thingy-default-rtdb.firebaseio.com/",
+                projectId: "qch-project-thingy",
+                storageBucket: "qch-project-thingy.appspot.com",
+                messagingSenderId: "725182269665",
+                appId: "1:725182269665:web:2c00123b2d63ca724acfa0"
+            };
+
+
+            firebase.initializeApp(firebaseConfig);
+
+            var allQueries = []
+                
+            const database = firebase.database();
+            dataRef = database.ref('nourishCLTQueryData');
+
+            loadQueryList()
+
+            function updateList(queries)
+            {
+                for (let query of queries)
+                {
+                    var template = document.getElementById("queryCardTemplate").content;
+                    var templateHTML = document.importNode(template, true);
+                    
+                    // don't ask me to ever explain this code, I don't remember what it means either
+                    templateHTML.querySelector("#status").textContent = (query[4] == 0) ?  "Not Started" : (query[4] == 1) ? "In Progress" : "Complete";
+                    
+                    templateHTML.querySelector("#f1").textContent = query[0];
+                    templateHTML.querySelector("#f2").textContent = query[1] ? "Food Request" : "Excess Food";
+                    templateHTML.querySelector("#f3").textContent = query[2];
+                    templateHTML.querySelector("#f4").textContent = query[3];
+                    
+                    queryList.appendChild(templateHTML);
+                }
+            }
+
+            function loadQueryList()
+            {
+                var queryList = document.getElementById("queryList");
+                var queries = []
+
+                dataRef.on('value', (snapshot) => {
+                    const jsonData = snapshot.val();
+                    for (const key in jsonData) {
+                        if (jsonData.hasOwnProperty(key)) {
+                            const item = jsonData[key];
+                            let query = [item.organization, item.type, item.location, item.date, item.status];
+                            queries.push(query)
+                        }
+                    }
+                    allQueries = queries
+                    updateList(queries)
+                });
+            }
+
+            function loadQueryListFilters()
+            {
+                filters = [
+                    document.getElementById('orgFilter').value.length > 0 ? document.getElementById('orgFilter').value : 104,
+                    document.getElementById('locFilter').value.length > 0 ? document.getElementById('orgFilter').value : 104,
+                    document.getElementById('dateFilter').value.length > 0 ? document.getElementById('orgFilter').value : 104
+                ];
+                
+                filterCopy = filters.filter((val) => val != 104);
+                var finalQueries = [];
+                for (query of allQueries)
+                {
+                    let add = true;
+                    for (let i = 0; i < filters.length; i++)
+                    {
+                        if (query[i] != filter[i])
+                        {
+                            add = false;
+                        }
+                    }
+                    if (add)
+                    {
+                        finalQueries.push(query);
+                    }
+                }
+                updateList(finalQueries);
+            }
+
+            function goToUserPage()
+            {
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const uid = urlParams.get('uid');
+                window.open('userPage.html?uid=' + uid, '_self');
+            }
+
+            function signout()
+            {
+                window.open('index.html', '_self');
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charlotte Food Compass</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap');
+        body {
+            background-color: #27263f;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative; /* Set body position to relative */
+        }
+        h1 {
+            color: #faf9f9;
+            font-family: 'Kanit', sans-serif;
+            font-size: 60px;
+        }
+        img {
+            border-radius: 30px;
+            width: 600px;
+        }
+        h4 {
+            font-family: 'Kanit', sans-serif;
+            color: #faf9f9;
+            text-align: center;
+            font-size: 25px;
+        }
+        #left-bar {
+            background-color: #1d4947;
+            width: 300px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 0 30px 30px 0;
+            padding: 30px;
+        }
+        .icon {
+            border-radius: 90px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        #left-bar button {
+            width: 100%;
+            padding: 20px 0;
+            background-color: #1d4947;
+            color: #faf9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 70px;
+        }
+        #mainImage {
+            position: fixed; 
+            bottom: 0; 
+            right: 0; 
+        }
+        #mainImage2{
+            position: fixed; 
+            bottom: 0; 
+            left:370px;
+            height: 42%;
+            width:auto;
+        }
+        .sideBarButtonStyling {
+            color: black;
+        }
+        .accountButtons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+
+        }
+        .accountButtons button {
+            background-color: #1d4947;
+            color: #faf9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+            border-radius: 10px;
+            margin-right: 50px;
+            padding:10px 30px 10px 30px;
+            
+        }
+
+    </style>
+    <script>
+        function openLogin(){
+            window.open("login.html", "_self")
+        }
+        function openSignUp(){
+            window.open("signup.html", "_self")
+        }
+    </script>
+</head>
+<body>
+    <div class="accountButtons">
+        <button onclick = "openLogin()">Login</button>
+        <button onclick = "openSignUp()">Sign Up</button>
+    </div>
+    <div id="left-bar">
+        <img class="icon" src="mainicon.png" onclick = "window.open('index.html', '_self')">
+        <button class="sideBarButtonStyling" onclick = "window.open('about.html', '_self')">About Charlotte Food Compass</button>
+        <hr>
+        <button class="sideBarButtonStyling" onclick = "window.open('involved.html', '_self')">Get Involved</button>
+        <hr>
+        <button class="sideBarButtonStyling">Donation Information</button>
+        <hr>
+    </div>
+    <center><h1>Charlotte Food Compass</h1></center>
+    <center><h4>Turning Excess into Empowerment</h4></center>
+    <img id="mainImage" src="img1.jpg">
+    <img id="mainImage2" src="givingfood.jpg">
+</body>
+</html>

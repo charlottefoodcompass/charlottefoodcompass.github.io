@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Charlotte Food Compass</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+        h1 {
+            font-family: 'Rubik', sans-serif;
+            padding: 10px;
+        }
+    </style>
+    <!-- Include Firebase JavaScript SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvNaTsxPXBcZraPPgSl7q1A5L-aTTvnOA",
+            authDomain: "qch-project-thingy.firebaseapp.com",
+            projectId: "qch-project-thingy",
+            storageBucket: "qch-project-thingy.appspot.com",
+            messagingSenderId: "725182269665",
+            appId: "1:725182269665:web:2c00123b2d63ca724acfa0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database;
+        const dataRef = database.ref('nourishCLTUserData');
+
+        function signUp() {
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const org = document.getElementById("oranization").value;
+
+            // Sign up with email and password
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // User signed up successfully
+                    const user = userCredential.user;
+                    
+                    // update realtime database
+                    var data = {
+                        'uid': user.uid,
+                        'username': username,                        
+                        'organization': organization
+                    };
+                    dataRef.push(data);
+
+                    window.open("forum.html?uid=" + user.uid, "_self")
+                })
+                .catch((error) => {
+                    // Handle errors
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    const messageElement = document.getElementById("message");
+                    messageElement.textContent = `Error: ${errorMessage}`;
+                    alert(errorCode + "\n" + errorMessage);
+                });
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@200&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Asap+Condensed&display=swap');
+        h1{
+            font-size: 50px;
+        }
+         body{
+            background-color: #27263f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #mainpage{
+            background-color: #faf9f9;
+            width: 60%;
+            height:80%;
+            padding: 35px;
+            border-radius: 40px;
+            text-align: center; 
+        }
+        .descriptions{
+            justify-content: left;
+            display: flex;
+            font-size: 25px;
+            font-family: 'Libre Franklin', sans-serif;
+            margin-left: 3%;
+            margin-top:3%;
+        }
+        input{
+            justify-content: left;
+            display: flex;
+            margin-left: 3%;
+            width:350px;
+            height:30px;
+            font-size: 20px;
+            font-family: 'Libre Franklin', sans-serif;
+            font-weight: 200;
+            
+        }
+        button{
+            padding:10px;
+            width:15%;
+            border-radius: 10px;
+            border:0;
+            background-color: #32ba8c;
+            color:#faf9f9;
+            margin-left: 3%;
+            justify-content: center;
+            display: flex;
+            font-weight: 1000;
+            font-size: 15px;
+        }
+        #message{
+            font-size: 15px;
+            width:20%;
+            margin-left: 3%;
+            margin-top:3%;
+            color:#f2b195;
+            font-family: 'Asap Condensed', sans-serif;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .icon{
+            border-radius: 50px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <img class="icon" src="mainicon.png" onclick="window.open('index.html', '_self')" style="position: absolute; top: 10px; left: 10px;">
+
+    <div id="mainpage">
+    <h1>Signup to Charlotte Food Compass</h1>
+    <a class = "descriptions">Username (This will be your public display name) </a><input type="text" id="username"><br><br>
+    <a class = "descriptions">Email </a><input type="text" id="email"><br><br>
+    <a class = "descriptions">Password </a><input type="password" id="password"><br><br>
+    <a class = "descriptions">Organization</a><input type = "text" id="organization"><br><br>
+    <br><br>
+    <button style="border-radius: 10px;" onclick="signUp()">Submit</button>
+    <p id="message"></p></div>
+</body>
+</html>

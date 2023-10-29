@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Charlotte Food Compass</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+        h1{
+            font-family: 'Rubik', sans-serif;
+            padding:10px;
+        }
+    </style>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvNaTsxPXBcZraPPgSl7q1A5L-aTTvnOA",
+            authDomain: "qch-project-thingy.firebaseapp.com",
+            projectId: "qch-project-thingy",
+            storageBucket: "qch-project-thingy.appspot.com",
+            messagingSenderId: "725182269665",
+            appId: "1:725182269665:web:2c00123b2d63ca724acfa0"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        
+        function login()
+        {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Sign in with email and password
+            firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // User logged in successfully
+                const user = userCredential.user;
+                //alert("Success, logged in as " + email);
+                window.open("forum.html?uid=" + user.uid, "_self")
+            })
+            .catch((error) => {
+                // Handle errors
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                //alert(errorCode + '\n' + errorMessage);
+                document.getElementById("error").innerHTML = "We couldn't find a username or password combination in our system."
+            });
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@200&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Asap+Condensed&display=swap');
+        h1{
+            font-size: 50px;
+        }
+         body{
+            background-color: #27263f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #mainpage{
+            background-color: #faf9f9;
+            width: 60%;
+            height:60%;
+            padding: 35px;
+            border-radius: 40px;
+            text-align: center; 
+        }
+        .descriptions{
+            justify-content: left;
+            display: flex;
+            font-size: 25px;
+            font-family: 'Libre Franklin', sans-serif;
+            margin-left: 3%;
+            margin-top:3%;
+        }
+        input{
+            justify-content: left;
+            display: flex;
+            margin-left: 3%;
+            width:350px;
+            height:30px;
+            font-size: 20px;
+            font-family: 'Libre Franklin', sans-serif;
+            font-weight: 200;
+            
+        }
+        button{
+            padding:10px;
+            width:15%;
+            border-radius: 10px;
+            border:0;
+            background-color: #32ba8c;
+            color:#faf9f9;
+            margin-left: 3%;
+            justify-content: center;
+            display: flex;
+            font-weight: 1000;
+            font-size: 15px;
+        }
+        .errorBox{
+            font-size: 15px;
+            width:20%;
+            margin-left: 3%;
+            margin-top:3%;
+            color:#f2b195;
+            font-family: 'Asap Condensed', sans-serif;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainpage">
+        <h1>Login to NourishCLT</h1>
+        <a class = "descriptions">Email</a><br><input type="text" id="email"><br><br>
+        <a class = "descriptions">Password</a><br><input type="password" id="password"><br><br>
+        <button onclick="login()">Submit</button>
+        <b><p class = "errorBox" id = "error"></p></b>
+    </div>
+</body>
+</html>
