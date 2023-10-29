@@ -94,18 +94,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
+    
     <button class = "accountButtons" onclick="signout()">Sign Out</button>
     <button class = "accountButtons1" onclick = "goToUserPage()">Create/Delete/Edit Posts and Requests</button>
     <center><h1>View Activity</h1></center>
-    <div>
-        <h3 id = "filterBy">Filter by:</h3><br>
-        <a id="orgFilter">Organization</a><input>
-        <a id="locFilter">City</a><input>
-        <a id="dateFilter">Date</a><input type = "date">
-        <button onclick="loadQueryListFilters()">filter</button>
-        
-        <br><br><br>
-    </div>
+    
         <center><div class="cardStyle" id="queryList"></div></center>
         <template id="queryCardTemplate">
             <div class="flex-container">

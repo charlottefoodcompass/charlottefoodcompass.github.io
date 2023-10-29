@@ -56,9 +56,46 @@
             font-family: 'Asap Condensed', sans-serif;
             size-adjust: s;
         }
+        .accountButtons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+            background-color: #1d4947;
+            color: #faf9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            margin-left: 10px;
+            border-radius: 30px;
+            margin-right: 30px;
+            margin-top: 30px;
+            padding:10px 30px 10px 30px;
+
+        }
+        .accountButtons1 {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+            background-color: #1d4947;
+            color: #faf9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            margin-left: 10px;
+            border-radius: 30px;
+            margin-right: 30px;
+            margin-top: 80px;
+            padding:10px 30px 10px 30px;
+        }
     </style>
+    <script>
+    </script>
 </head>
 <body>
+    <button class = "accountButtons" onclick="signout()">Sign Out</button>
+    <button class = "accountButtons1" onclick = "posts()">Back to Posts</button>
     <center><h1>Your Requests</h1>
         <div class="flex-container2">
             <select name="Type" class="flex-item" id="type">
@@ -72,7 +109,7 @@
         <center><div class="cardStyle" id="queryList">
         </div></center>
         <template id="queryCardTemplate">
-            <div class="flex-container">
+            <div class="flex-container" id="urmom">
                 <p class="flex-item" id="f1"></p>
                 <p class="flex-item" id="f2"></p>
                 <p class="flex-item" id="f3"></p>
@@ -102,10 +139,13 @@
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const uid = urlParams.get('uid');
-            //getUserData(uid);
+            getUserData(uid);
 
             function updateList(queries)
             {
+                while (document.getElementById('urmom')) {
+                    document.getElementById('urmom').remove()
+                }
                 for (let query of queries)
                 {
                     var template = document.getElementById("queryCardTemplate").content;
@@ -117,9 +157,6 @@
                     templateHTML.querySelector("#f4").textContent = query[3];
                     
                     queryList.appendChild(templateHTML);
-
-                    let deezNuts = document.getElementById('deezNuts');
-                    deezNuts.id = query[0]
                 }
             }
 
@@ -174,12 +211,13 @@
                     const jsonData = snapshot.val();
                     for (const key in jsonData) {
                         if (jsonData.hasOwnProperty(key)) {
+                            console.log(jsonData[key])
                             const item = jsonData[key];
                             const itemUID = item.uid;
                             if (itemUID == uid)
                             {
                                 user = item;
-                                loadQueryListB()
+                                loadQueryListB();
                                 return;
                             }
                         }
@@ -197,20 +235,17 @@
                     'status': 0
                 };
                 dataRef.push(query);
-                allQueries.push([user.organization, (document.getElementById('type').value == 'A') ? true : false, document.getElementById('location').value, document.getElementById('date').value, 0]);
+                location.reload();
             }
 
-            function goToForumPage()
-            {
-                const queryString = window.location.search;
-                const urlParams = new URLSearchParams(queryString);
-                const uid = urlParams.get('uid');
-                window.open('forum.html?uid=' + uid, '_self');
+            
+            function posts(){
+                window.open('forum.html?uid='+user.uid, '_self')
             }
 
             function signout()
             {
-                window.open('index.html', '_self');
+                window.open('index.html', '_self')
             }
         </script>
     </body>
